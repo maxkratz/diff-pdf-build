@@ -1,0 +1,35 @@
+name: Build diff-pdf
+on:
+  push:
+    # Run pipeline for commits on branch 'main' and on 'testing/<stuff>'
+    branches:
+      - main
+      - 'testing/**'
+      - 'feature/**'
+      - 'hotfix/**'
+
+jobs:
+  build-ubuntu-22-04:
+    name: Build on Ubuntu 22.04
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        repository: vslavik/diff-pdf
+        ref: master
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -yq make automake g++
+        sudo apt-get install -yq libpoppler-glib-dev poppler-utils libwxgtk3.0-gtk3-dev
+    - name: Bootstrap
+      run: ls -la && ./bootstrap
+    - name: Configure
+      run: ./configure
+    - name: Build
+      run: make
+    - name: Upload binary
+      uses: actions/upload-artifact@v7
+      with:
+        name: diff-pdf
+        path: diff-pdf
