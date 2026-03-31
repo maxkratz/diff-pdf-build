@@ -11,6 +11,10 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  # Allow the release creation
+  contents: write
+
 jobs:
   build-ubuntu-22-04:
     name: Build on Ubuntu 22.04
